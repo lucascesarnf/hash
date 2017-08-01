@@ -11,11 +11,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-void initHash(int n);
+#include "Dados.h"
 
-void recalculaProfundidade(int index, int rid);
+void hash(RegistroPessoa *regs);
 
-int insereRegistro(int rid);
+void initHash(int n);//
+
+void alocaBucket(int index, Registro reg);//
+
+int removeRegistro(int rid);//
+
+void recalculaProfundidade(int index, Registro reg);//
+
+int insereRegistro(Registro reg);//
 
 int funcaoHash(int id);
 
@@ -23,7 +31,5 @@ void printHash();
 
 void printBuckets();
 
-void alocaBucket(int index, int rid);
-
-int buscaRegistro(int rid);
+RegistroPessoa *buscaRegistro(int rid);
 #endif /* HASH_h */

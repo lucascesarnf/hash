@@ -10,13 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "hash/HASH.c"
-            timestampString = "523298405.51793"
+            timestampString = "523310084.410268"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
-            landmarkName = "insereRegistro()"
-            landmarkType = "9">
+            startingLineNumber = "233"
+            endingLineNumber = "233">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "hash/main.c"
-            timestampString = "523298598.111544"
+            timestampString = "523309200.602248"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "main()"
             landmarkType = "9">
          </BreakpointContent>
@@ -42,28 +40,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "hash/HASH.c"
-            timestampString = "523298405.51793"
+            timestampString = "523308537.114559"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "recalculaProfundidade()"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "hash/HASH.c"
-            timestampString = "523298405.51793"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
-            landmarkName = "recalculaProfundidade()"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "hash()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

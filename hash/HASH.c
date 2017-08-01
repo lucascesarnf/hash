@@ -19,7 +19,19 @@ Bucket *buckets;//Buckets reais
 int numBuckets;
 //#############################################################
 
-
+void hash(RegistroPessoa *regs){
+  initHash(2);
+  Registro r;
+  for(int i = 0; i< TM_MAX_REGISTROS;i++){
+    r.rid = regs[i].rid;
+    r.registro = &regs[i];
+    if(r.rid == 20){
+      printf("\n! ! HASH ANTES DA DUPLICAÇÃO ! !");
+      printHash();
+    }
+    insereRegistro(r);
+  }
+}
 //Inicia o HASH com o tamanho n;
 void initHash(int n){
   
@@ -38,7 +50,8 @@ void initHash(int n){
     //Inicializa o bucket com zeros:
     for(int j = 0; j < TAMANHO_DO_BUCKET; j++){
       
-      buckets[i].chaves[j] = 0;
+      buckets[i].chaves[i].rid = 0;
+      buckets[i].chaves[i].registro = NULL;
       
     }
     //Vincula a tabela ao seu respectivo bucket:
@@ -49,36 +62,38 @@ void initHash(int n){
 }
 
 //Aloca Bucket:
-void alocaBucket(int index, int rid){
+void alocaBucket(int index, Registro reg){
   if(numBuckets == profundidadeGlobal){
-    recalculaProfundidade(index, rid);
+    recalculaProfundidade(index, reg);
   }else{
     //Adiciona mais 1 bucket:
     numBuckets ++;
     buckets = realloc(buckets, numBuckets);
     buckets[numBuckets - 1].profundidadeLocal = profundidadeGlobal;
     for (int i = 0; i<TAMANHO_DO_BUCKET; i++) {
-      buckets[numBuckets - 1].chaves[i] = 0;
+      buckets[numBuckets - 1].chaves[i].rid = 0;
+      buckets[numBuckets - 1].chaves[i].registro = NULL;
     }
     tabelaBinaria[numBuckets -1].bucket = &buckets[numBuckets - 1];
     //Recoloca as chaves do bucket:
-    int aux[TAMANHO_DO_BUCKET];
+    Registro aux[TAMANHO_DO_BUCKET];
     
     for(int i = 0; i < TAMANHO_DO_BUCKET; i ++){
       aux[i] = buckets[index].chaves[i];
-      buckets[index].chaves[i] = 0;
+      buckets[index].chaves[i].rid = 0;
+      buckets[index].chaves[i].registro = NULL;
     }
     for(int i = 0; i < TAMANHO_DO_BUCKET; i ++){
       insereRegistro(aux[i]);
     }
-    insereRegistro(rid);
+    insereRegistro(reg);
     //printHash();
   }
 }
 
 
 //Recalcula a profundidade do hash binário:
-void recalculaProfundidade(int index, int rid){
+void recalculaProfundidade(int index, Registro reg){
   
   int n2 = N + 1;
   int prof2 = pow(2,n2);
@@ -103,61 +118,79 @@ void recalculaProfundidade(int index, int rid){
   buckets = realloc(buckets, numBuckets);
   buckets[numBuckets - 1].profundidadeLocal = profundidadeGlobal;
   for (int i = 0; i<TAMANHO_DO_BUCKET; i++) {
-    buckets[numBuckets - 1].chaves[i] = 0;
+    buckets[numBuckets - 1].chaves[i].rid = 0;
+    buckets[numBuckets - 1].chaves[i].registro = NULL;
   }
- 
-  printBuckets();
+  
+  //printBuckets();
   
   //Adiciona o novo Bucket ao centro da tabela multiplicada:
   tabelaBinaria[profundidadeGlobal/2].bucket = &buckets[numBuckets - 1];
   
   //printHash();
+  
   //Recoloca as chaves do bucket:
-  int aux[TAMANHO_DO_BUCKET];
+  Registro aux[TAMANHO_DO_BUCKET];
   
   for(int i = 0; i < TAMANHO_DO_BUCKET; i ++){
     aux[i] = buckets[index].chaves[i];
-    buckets[index].chaves[i] = 0;
+    buckets[index].chaves[i].rid = 0;
+    buckets[index].chaves[i].registro = NULL;
   }
   for(int i = 0; i < TAMANHO_DO_BUCKET; i ++){
     insereRegistro(aux[i]);
   }
-  insereRegistro(rid);
-  //printHash();
+  insereRegistro(reg);
+  printf("\n! ! HASH APÓS DA DUPLICAÇÃO ! !");
+  printHash();
 }
 
-int insereRegistro(int rid){
+int insereRegistro(Registro reg){
   
-  int index = funcaoHash(rid);//Calculo o index na tabela
-  
+  int index = funcaoHash(reg.rid);//Calculo o index na tabela
   
   //procuro espaço no bukket
   for(int i = 0; i < TAMANHO_DO_BUCKET; i++){
-    if(tabelaBinaria[index].bucket->chaves[i] == 0){
+    if(tabelaBinaria[index].bucket->chaves[i].rid == 0){
       //Se tiver espaço guardo nele
-      tabelaBinaria[index].bucket->chaves[i] = rid;
+      tabelaBinaria[index].bucket->chaves[i] = reg;
       tabelaBinaria[index].bucket->profundidadeLocal = profundidadeGlobal;
       return 1;
     }
   }
-  //Se não encontrar espaço no bucket dobra o diretório:
-  alocaBucket(index,rid);
+  //Se não encontrar espaço no bucket adiciona bucket/ dobra diretório:
+  alocaBucket(index,reg);
   //recalculaProfundidade(index,rid);
   return 0;
 }
 
-int buscaRegistro(int rid){
+RegistroPessoa *buscaRegistro(int rid){
   int index = funcaoHash(rid);
   for(int i = 0; i< TAMANHO_DO_BUCKET;i++){
-    if(tabelaBinaria[index].bucket->chaves[i] == rid){
-      return tabelaBinaria[index].bucket->chaves[i];
+    if(tabelaBinaria[index].bucket->chaves[i].rid == rid){
+      return tabelaBinaria[index].bucket->chaves[i].registro;
+    }
+  }
+  return NULL;
+}
+
+int removeRegistro(int rid){
+  int index = funcaoHash(rid);
+  for(int i = 0; i< TAMANHO_DO_BUCKET;i++){
+    if(tabelaBinaria[index].bucket->chaves[i].rid == rid){
+      //ZERA A VARIÁVEL:
+      tabelaBinaria[index].bucket->chaves[i].registro->idade = 0;
+      strcpy(tabelaBinaria[index].bucket->chaves[i].registro->nome,"");
+      tabelaBinaria[index].bucket->chaves[i].registro->rid = 0;
+      
+      //Remove do Hash:
+      tabelaBinaria[index].bucket->chaves[i].rid = 0;
+      tabelaBinaria[index].bucket->chaves[i].registro = NULL;
+      return 1;
     }
   }
   return 0;
 }
-
-
-
 //##### C A L C U L A   F U N Ç Ã O   H A S H #######
 int funcaoHash(int id){
   
@@ -172,7 +205,7 @@ void printHash(){
     
     printf("\n[%d] - > [%d] ",i,tabelaBinaria[i].bucket->profundidadeLocal);
     for(int j = 0; j < TAMANHO_DO_BUCKET; j ++){
-      printf("|%d|",tabelaBinaria[i].bucket->chaves[j]);
+      printf("|%d|",tabelaBinaria[i].bucket->chaves[j].rid);
       
     }
   }
@@ -185,7 +218,7 @@ void printBuckets(){
     
     printf("\n[%d] - > [%d] ",i, buckets[i].profundidadeLocal);
     for(int j = 0; j < TAMANHO_DO_BUCKET; j ++){
-      printf("|%d|",buckets[i].chaves[j]);
+      printf("|%d|",buckets[i].chaves[j].rid);
       
     }
   }

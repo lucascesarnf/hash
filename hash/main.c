@@ -11,28 +11,53 @@
 
 int main(int argc, const char * argv[]) {
   
-  initHash(2);
-  //00
-  insereRegistro(4);
-  insereRegistro(12);
-  insereRegistro(32);
-  insereRegistro(16);
-  //01
-  insereRegistro(1);
-  insereRegistro(5);
-  insereRegistro(21);
-  insereRegistro(13);
-  //10
-  insereRegistro(10);
-  //11
-  insereRegistro(15);
-  insereRegistro(7);
-  insereRegistro(19);
+  //########### CARREGA ARQUIVO ###############
+  RegistroPessoa registros[15];
+  FILE *f = fopen("arquivo.txt", "r");
+  if(f == NULL){
+    exit(1);
+  }
+  int count = 0;
+  while (!feof(f)){
+    fscanf(f, "%d %s %d", &registros[count].rid,registros[count].nome,&registros[count].idade);
+    count ++;
+  }
+  
+  
+  for(int i = 0; i < TM_MAX_REGISTROS; i++){
+    printf("\n[%d][%d,%s,%d]\n",i,registros[i].rid,registros[i].nome,registros[i].idade);
+  }
+  //###########################################
+  
+  //Cria um hash na chave primária de registros:
+  hash(registros);
+  //Imprime o Hash criado:
+   printf("\n! ! HASH FINAL  ! !");
   printHash();
   
-  insereRegistro(20);
+  //Pesquisa por índice rid:
+  RegistroPessoa *p = buscaRegistro(registros[6].rid);
+  printf("\n\nRegistro buscado:\n[6][%d %s %d]\n\n",p->rid,p->nome,p->idade);
+  
+  
+  RegistroPessoa p2;
+  p2.rid = 100;
+  p2.idade = 100;
+  strcpy(p2.nome,"Inserido");
+  Registro reg;
+  reg.rid = p2.rid;
+  reg.registro = &p2;
+  
+  //Insere registro:
+  insereRegistro(reg);
+  printf("\n! ! HASH INSERÇÃO  ! !");
   printHash();
-  insereRegistro(25);
+  //Remove registro que acabamos de adicionar:
+  removeRegistro(reg.rid);
+  
+  printf("\n\nRegistro deletado:\n[%d %s %d]\n\n",reg.rid,reg.registro->nome,reg.registro->idade);
+  
+  printf("\n! ! HASH REMOÇÃO  ! !");
   printHash();
-  return 0;
+   return 0;
 }

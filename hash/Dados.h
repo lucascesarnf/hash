@@ -9,8 +9,9 @@
 #ifndef Dados_h
 #define Dados_h
 //### D E F I N I Ç Õ E S   D E  C O N S T A N T E S ########
-#define TM_MAX_REGISTROS 50
+#define TM_MAX_REGISTROS 15
 #define TAMANHO_DO_BUCKET 4
+
 //##########################################################
 #include <stdio.h>
 
@@ -22,10 +23,17 @@ typedef struct registro_pessoa
 } RegistroPessoa;
 
 
+typedef struct reg
+{
+  int rid;
+  RegistroPessoa *registro;
+} Registro;
+
+
 typedef struct bucket
 {
   int profundidadeLocal;
-  int chaves[TAMANHO_DO_BUCKET];
+  Registro chaves[TAMANHO_DO_BUCKET];
 } Bucket;
 
 typedef struct tabela_binaria
@@ -33,7 +41,6 @@ typedef struct tabela_binaria
   Bucket *bucket;
   
 } TabelaBinaria;
-
 
 
 
